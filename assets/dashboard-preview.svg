@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">VulnSignal dashboard preview</title>
+  <desc id="desc">Static synthetic preview of the VulnSignal AI security finding intelligence dashboard.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#121b2f"/></linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0f2940"/><stop offset="0.55" stop-color="#172644"/><stop offset="1" stop-color="#181c33"/></linearGradient>
+    <style>
+      .t{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8eef8}
+      .muted{fill:#8fa0b7}.cyan{fill:#7dd3fc}.good{fill:#86efac}.warn{fill:#fbbf24}.bad{fill:#fda4af}
+      .card{fill:#141c2d;stroke:#2c3a52;stroke-width:1}.line{stroke:#31425d;stroke-width:1}
+    </style>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <rect x="34" y="28" width="1372" height="128" rx="20" fill="url(#hero)" stroke="#2d415d"/>
+  <text x="64" y="62" class="t cyan" font-size="14" font-weight="700" letter-spacing="2">AI SECURITY FINDING INTELLIGENCE</text>
+  <text x="64" y="104" class="t" font-size="36" font-weight="800">VulnSignal</text>
+  <text x="64" y="133" class="t muted" font-size="16">Finding quality → developer triage → remediation → verified security outcomes</text>
+
+  <g transform="translate(34 182)">
+    <g><rect class="card" width="252" height="105" rx="16"/><text x="22" y="31" class="t muted" font-size="13">Finding precision</text><text x="22" y="70" class="t" font-size="29" font-weight="800">77.8%</text><text x="164" y="70" class="t good" font-size="13">trusted signal</text></g>
+    <g transform="translate(280 0)"><rect class="card" width="252" height="105" rx="16"/><text x="22" y="31" class="t muted" font-size="13">Actionability</text><text x="22" y="70" class="t" font-size="29" font-weight="800">77.8%</text><text x="164" y="70" class="t good" font-size="13">usable findings</text></g>
+    <g transform="translate(560 0)"><rect class="card" width="252" height="105" rx="16"/><text x="22" y="31" class="t muted" font-size="13">Developer acceptance</text><text x="22" y="70" class="t" font-size="29" font-weight="800">77.8%</text><text x="164" y="70" class="t good" font-size="13">accepted</text></g>
+    <g transform="translate(840 0)"><rect class="card" width="252" height="105" rx="16"/><text x="22" y="31" class="t muted" font-size="13">Verified resolution</text><text x="22" y="70" class="t" font-size="29" font-weight="800">66.7%</text><text x="164" y="70" class="t good" font-size="13">closed loop</text></g>
+    <g transform="translate(1120 0)"><rect class="card" width="252" height="105" rx="16"/><text x="22" y="31" class="t muted" font-size="13">Median triage</text><text x="22" y="70" class="t" font-size="29" font-weight="800">12 min</text><text x="164" y="70" class="t cyan" font-size="13">workflow</text></g>
+  </g>
+
+  <g transform="translate(34 316)">
+    <rect class="card" width="666" height="300" rx="18"/>
+    <text x="24" y="36" class="t" font-size="17" font-weight="700">Security outcome funnel</text>
+    <text x="24" y="59" class="t muted" font-size="12">How model output converts into verified risk reduction</text>
+    <g transform="translate(38 88)">
+      <text x="0" y="18" class="t muted" font-size="12">AI flagged</text><rect x="120" y="2" width="450" height="22" rx="7" fill="#276b8f"/><text x="585" y="18" class="t" font-size="12">9</text>
+      <text x="0" y="62" class="t muted" font-size="12">Actionable</text><rect x="120" y="46" width="350" height="22" rx="7" fill="#2e7799"/><text x="585" y="62" class="t" font-size="12">7</text>
+      <text x="0" y="106" class="t muted" font-size="12">Accepted</text><rect x="120" y="90" width="350" height="22" rx="7" fill="#3a84a3"/><text x="585" y="106" class="t" font-size="12">7</text>
+      <text x="0" y="150" class="t muted" font-size="12">Remediated</text><rect x="120" y="134" width="300" height="22" rx="7" fill="#55a0b8"/><text x="585" y="150" class="t" font-size="12">6</text>
+      <text x="0" y="194" class="t muted" font-size="12">Verified</text><rect x="120" y="178" width="300" height="22" rx="7" fill="#70b9ca"/><text x="585" y="194" class="t" font-size="12">6</text>
+    </g>
+
+    <g transform="translate(692 0)">
+      <rect class="card" width="680" height="300" rx="18"/>
+      <text x="24" y="36" class="t" font-size="17" font-weight="700">Triage experiment</text>
+      <text x="24" y="59" class="t muted" font-size="12">Raw finding vs enriched evidence + remediation guidance</text>
+      <line x1="48" y1="244" x2="632" y2="244" class="line"/>
+      <line x1="48" y1="92" x2="48" y2="244" class="line"/>
+      <g transform="translate(95 0)"><rect x="0" y="151" width="44" height="93" rx="7" fill="#495a73"/><rect x="54" y="113" width="44" height="131" rx="7" fill="#4ea3c6"/><text x="0" y="270" class="t muted" font-size="11">Completion</text></g>
+      <g transform="translate(270 0)"><rect x="0" y="165" width="44" height="79" rx="7" fill="#495a73"/><rect x="54" y="123" width="44" height="121" rx="7" fill="#4ea3c6"/><text x="8" y="270" class="t muted" font-size="11">Acceptance</text></g>
+      <g transform="translate(445 0)"><rect x="0" y="186" width="44" height="58" rx="7" fill="#495a73"/><rect x="54" y="133" width="44" height="111" rx="7" fill="#4ea3c6"/><text x="3" y="270" class="t muted" font-size="11">Remediation</text></g>
+      <rect x="500" y="28" width="12" height="12" rx="3" fill="#495a73"/><text x="519" y="38" class="t muted" font-size="11">Control</text>
+      <rect x="570" y="28" width="12" height="12" rx="3" fill="#4ea3c6"/><text x="589" y="38" class="t muted" font-size="11">Enriched</text>
+    </g>
+  </g>
+
+  <g transform="translate(34 644)">
+    <rect class="card" width="1372" height="216" rx="18"/>
+    <text x="24" y="37" class="t" font-size="17" font-weight="700">Highest-value findings</text>
+    <text x="24" y="60" class="t muted" font-size="12">Prioritized by transparent actionability score and asset criticality</text>
+    <line x1="24" y1="86" x2="1348" y2="86" class="line"/>
+    <text x="34" y="108" class="t muted" font-size="11">ID</text><text x="146" y="108" class="t muted" font-size="11">SEVERITY</text><text x="270" y="108" class="t muted" font-size="11">CWE</text><text x="420" y="108" class="t muted" font-size="11">CODE PATH</text><text x="930" y="108" class="t muted" font-size="11">CONFIDENCE</text><text x="1080" y="108" class="t muted" font-size="11">ACTIONABILITY</text><text x="1250" y="108" class="t muted" font-size="11">STATUS</text>
+    <line x1="24" y1="120" x2="1348" y2="120" class="line"/>
+    <text x="34" y="146" class="t" font-size="12">F-104</text><text x="146" y="146" class="t bad" font-size="12">critical</text><text x="270" y="146" class="t" font-size="12">CWE-798</text><text x="420" y="146" class="t" font-size="12">services/auth/config.py</text><text x="930" y="146" class="t" font-size="12">0.96</text><text x="1080" y="146" class="t cyan" font-size="12">0.92</text><text x="1250" y="146" class="t good" font-size="12">Verified</text>
+    <text x="34" y="181" class="t" font-size="12">F-107</text><text x="146" y="181" class="t warn" font-size="12">high</text><text x="270" y="181" class="t" font-size="12">CWE-89</text><text x="420" y="181" class="t" font-size="12">api/search.py</text><text x="930" y="181" class="t" font-size="12">0.91</text><text x="1080" y="181" class="t cyan" font-size="12">0.88</text><text x="1250" y="181" class="t good" font-size="12">Remediated</text>
+  </g>
+</svg>
