@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vulnsignal"
+version = "0.1.0"
+description = "AI security finding quality, triage, and remediation intelligence"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+vulnsignal = "vulnsignal.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["vulnsignal*"]
