@@ -6,52 +6,95 @@
 
 **Measure what happens after an AI system says “this looks vulnerable.”**
 
+[![Python](https://img.shields.io/badge/Python-3.10--3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-FF4B4B?logo=streamlit&logoColor=white)](dashboard/app.py)
+[![CI](https://github.com/VinayK88/VulnSignal/actions/workflows/ci.yml/badge.svg)](https://github.com/VinayK88/VulnSignal/actions/workflows/ci.yml)
+[![Safety](https://img.shields.io/badge/Data-Synthetic%20Only-7B61FF)](#evaluation-boundary)
+
+**Detect → validate → calibrate → deduplicate → triage → remediate → verify**
+
 </div>
 
 ---
 
-VulnSignal is a security data-science project for evaluating AI-generated security findings across the full workflow: detection, validation, severity, actionability, duplication, developer triage, remediation, and verified resolution.
+![VulnSignal dashboard preview](assets/dashboard-preview.svg)
 
-The core question is not only:
+VulnSignal is a security data-science platform for evaluating AI-generated security findings across the **full security workflow**—not just raw model accuracy.
 
-> **Did the model find a vulnerability?**
-
-It is:
+It answers a harder question:
 
 > **Was the finding correct, appropriately severe, actionable, non-duplicative, accepted by the developer, remediated, and actually verified as resolved?**
 
-## Why this project exists
+## Why this project matters
 
-Security products can look impressive on raw finding counts while creating large downstream costs: duplicate alerts, inflated severity, low-actionability reports, wasted developer time, and findings that never turn into fixes. VulnSignal treats those downstream outcomes as first-class product and security metrics.
+AI security products can look successful on finding volume while creating downstream costs: duplicate alerts, inflated severity, weak evidence, wasted developer time, and findings that never turn into verified fixes.
+
+VulnSignal treats those downstream outcomes as first-class security and product metrics.
+
+```text
+AI finding
+   ↓
+Is it correct?
+   ↓
+Is severity calibrated?
+   ↓
+Is it actionable and unique?
+   ↓
+Does a developer accept it?
+   ↓
+Does it get remediated?
+   ↓
+Is the resolution verified?
+```
+
+## Dashboard
+
+The Streamlit dashboard turns the synthetic benchmark into an executive + analyst workflow with four views:
+
+1. **Executive overview** — precision, actionability, acceptance, verified resolution, security-outcome funnel, and highest-value findings.
+2. **Finding explorer** — interactive filtering by predicted severity, CWE, and actionability score.
+3. **Workflow experiment** — control vs enriched-finding workflow for completion, acceptance, remediation, and triage time.
+4. **Quality diagnostics** — recall, severity error, duplicate burden, deduplication reduction, severity mix, and CWE mix.
+
+Run it locally:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e '.[dashboard]'
+streamlit run dashboard/app.py
+```
 
 ## Architecture
 
-```text
-Repository / code changes
-        ↓
-AI security analyzer
-        ↓
-Candidate findings
-        ↓
-Ground-truth / disposition join
-        ↓
-Finding quality evaluation
-  ├─ precision / recall
-  ├─ severity calibration
-  ├─ actionability
-  ├─ duplicate burden
-  └─ developer acceptance
-        ↓
-Triage workflow
-        ↓
-Remediation
-        ↓
-Resolution verification
-        ↓
-Product + security outcome report
+```mermaid
+flowchart LR
+    CODE[Repository / code changes] --> MODEL[AI security analyzer]
+    MODEL --> F[Candidate findings]
+    F --> JOIN[Ground truth + dispositions]
+    JOIN --> Q[Finding quality engine]
+    Q --> DEDUPE[Duplicate clustering]
+    Q --> SCORE[Actionability scoring]
+    DEDUPE --> TRIAGE[Developer triage]
+    SCORE --> TRIAGE
+    TRIAGE --> FIX[Remediation]
+    FIX --> VERIFY[Resolution verification]
+    VERIFY --> OUT[Security + product outcomes]
+    OUT --> DASH[Dashboard / report]
 ```
 
-## Metrics
+## Measurement framework
+
+VulnSignal deliberately separates four layers that are often collapsed into one model score:
+
+| Layer | Core question | Metrics |
+|---|---|---|
+| **Model quality** | Did the system identify real vulnerabilities? | Precision, recall |
+| **Finding quality** | Is the output useful and correctly prioritized? | Severity MAE, actionability, duplication |
+| **Workflow quality** | Can developers act efficiently? | Acceptance, triage completion, triage time |
+| **Security outcome** | Did the finding lead to real risk reduction? | Remediation, verified resolution |
+
+## Core metrics
 
 The executable synthetic benchmark reports:
 
@@ -64,38 +107,12 @@ The executable synthetic benchmark reports:
 - verified-resolution rate;
 - median time to triage;
 - median time to remediation;
-- transparent actionability scores;
-- treatment-vs-control triage workflow effects;
+- treatment-vs-control workflow effects;
 - bootstrap uncertainty for remediation-rate improvement.
-
-## Finding schema
-
-```text
-finding_id
-model_flagged
-actually_vulnerable
-predicted_severity
-confirmed_severity
-confidence
-cwe
-code_path
-description
-evidence_quality
-fix_quality
-asset_criticality
-developer_accepted
-actionable
-remediated
-resolution_verified
-triage_minutes
-remediation_hours
-```
-
-The schema intentionally connects model behavior to downstream product outcomes rather than stopping at classification accuracy.
 
 ## Actionability score
 
-VulnSignal includes a transparent prioritization score:
+VulnSignal includes an inspectable prioritization score:
 
 ```text
 actionability =
@@ -106,25 +123,25 @@ actionability =
   - 0.15 × duplicate penalty
 ```
 
-This is **not** presented as a calibrated vulnerability probability. It is an inspectable decision-support score whose assumptions can be challenged and sensitivity-tested.
+This is **not** presented as a calibrated vulnerability probability. It is a transparent decision-support score whose assumptions can be challenged and sensitivity-tested.
 
-## Duplicate finding reduction
+## Duplicate reduction
 
-The baseline duplicate engine clusters AI findings using token overlap across CWE, code path, and finding description. It is deliberately simple and interpretable so the project can measure a practical question:
+The baseline duplicate engine clusters findings using token overlap across CWE, code path, and description. The goal is to quantify a practical security-product question:
 
-> How much developer triage work disappears when near-duplicate findings are consolidated?
+> **How much developer triage work disappears when near-duplicate findings are consolidated?**
 
-A production evolution could compare lexical similarity with embedding-based retrieval, learned pairwise duplicate classification, or graph-based root-cause grouping.
+A production evolution could compare this baseline with embedding retrieval, pairwise duplicate classification, or graph-based root-cause grouping.
 
 ## Triage experiment
 
-The synthetic experiment compares two workflows:
+The synthetic experiment compares:
 
 **Control** — developer receives the raw AI finding.
 
-**Treatment** — developer receives an enriched finding with stronger evidence, prioritization context, and remediation guidance.
+**Treatment** — developer receives stronger evidence, prioritization context, and remediation guidance.
 
-The analysis compares:
+The analysis measures:
 
 ```text
 triage completion
@@ -135,25 +152,21 @@ median triage time
 
 and bootstraps the treatment-minus-control remediation difference rather than reporting only a point estimate.
 
-The fixture is deterministic and synthetic. It demonstrates experimentation mechanics, not a causal claim about any real product.
-
 ## SQL data foundation
 
-`sql/finding_quality.sql` shows how the same metrics could be computed from a warehouse after joining AI findings to validation, developer disposition, and remediation outcomes.
-
-A production data model would typically connect:
+`sql/finding_quality.sql` demonstrates how warehouse data can connect:
 
 ```text
 finding event
   → model/version metadata
   → code asset / owner
-  → triage disposition
+  → validation / disposition
   → duplicate/root-cause cluster
   → remediation change
   → resolution verification
 ```
 
-That linkage is essential because finding quality cannot be inferred from model output alone.
+That linkage matters because security finding quality cannot be inferred from model output alone.
 
 ## Quick start
 
@@ -166,17 +179,28 @@ vulnsignal
 python -m unittest discover -s tests -v
 ```
 
+Dashboard:
+
+```bash
+pip install -e '.[dashboard]'
+streamlit run dashboard/app.py
+```
+
 ## Repository map
 
 ```text
 VulnSignal/
+├── dashboard/
+│   └── app.py            interactive executive + analyst dashboard
+├── assets/
+│   └── dashboard-preview.svg
 ├── vulnsignal/
-│   ├── models.py       finding contract
-│   ├── metrics.py      quality + downstream metrics
-│   ├── dedupe.py       transparent duplicate clustering
-│   ├── experiment.py   workflow comparison + bootstrap
-│   ├── fixtures.py     deterministic synthetic benchmark
-│   ├── report.py       integrated evidence report
+│   ├── models.py         finding contract
+│   ├── metrics.py        quality + downstream metrics
+│   ├── dedupe.py         transparent duplicate clustering
+│   ├── experiment.py     workflow comparison + bootstrap
+│   ├── fixtures.py       deterministic synthetic benchmark
+│   ├── report.py         integrated evidence report
 │   └── cli.py
 ├── sql/
 │   └── finding_quality.sql
@@ -188,21 +212,25 @@ VulnSignal/
 
 ## Production evolution
 
-High-value next steps would be:
+High-value extensions would include:
 
-1. Add versioned adapters for real code-security model outputs while keeping evaluation data authorized and privacy-reviewed.
-2. Build severity reliability diagrams and calibration metrics by CWE and asset class.
-3. Replace lexical duplicate clustering with embeddings plus human-reviewed duplicate labels.
-4. Train a remediation-likelihood model using only pre-triage features and time-aware validation.
-5. Measure subgroup performance by repository, language, CWE, severity, and customer segment.
-6. Track time-to-triage and time-to-remediation with censoring-aware analysis for unresolved findings.
-7. Evaluate staged product changes with assignment-aware experiments, guardrails, and confidence intervals.
-8. Connect finding quality to customer value: activation, repeated use, accepted recommendations, vulnerability reduction, and enterprise retention.
+- versioned adapters for real code-security model outputs;
+- calibration curves by CWE, language, repository, and severity;
+- embedding-based duplicate detection with human-reviewed labels;
+- remediation-likelihood modeling using pre-triage features only;
+- time-aware validation and subgroup performance analysis;
+- censoring-aware time-to-remediation analysis;
+- staged product experiments with guardrails and confidence intervals;
+- telemetry linking finding quality to activation, repeat use, accepted recommendations, vulnerability reduction, and enterprise value.
 
 ## Evaluation boundary
 
-All code paths, findings, developers, dispositions, and outcomes in this repository are synthetic. The included metrics validate the analytical workflow and software implementation only. They do not estimate real-world vulnerability-detection accuracy or product impact.
+All code paths, findings, developer dispositions, and outcomes in this repository are synthetic. The included metrics validate the analytical workflow and software implementation only; they do not estimate real-world vulnerability-detection accuracy or product impact.
 
 ---
 
+<div align="center">
+
 **A security finding is valuable only when it is trustworthy enough to act on—and the action measurably reduces risk.**
+
+</div>
