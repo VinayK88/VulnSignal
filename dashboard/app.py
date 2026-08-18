@@ -39,7 +39,6 @@ st.markdown(
 .vs-kicker {font-size:.78rem; text-transform:uppercase; letter-spacing:.13em; color:#7dd3fc; font-weight:700;}
 .vs-title {font-size:2.15rem; font-weight:800; margin:.2rem 0 .3rem 0;}
 .vs-sub {color:#aeb9cc; font-size:1rem; max-width:900px; line-height:1.55;}
-.vs-note {color:#94a3b8; font-size:.82rem;}
 </style>
 """,
     unsafe_allow_html=True,
@@ -223,7 +222,7 @@ with quality_tab:
     q1.metric("Recall", f"{quality['recall']:.1%}")
     q2.metric("Severity MAE", f"{quality['severity_mae_levels']:.2f} levels")
     q3.metric("Duplicate rate", f"{quality['duplicate_rate']:.1%}")
-    q4.metric("Dedup reduction", f"{dedupe['reduction_rate']:.1%}")
+    q4.metric("Dedup reduction", f"{dedupe['duplicate_reduction_rate']:.1%}")
 
     left, right = st.columns(2)
     with left:
