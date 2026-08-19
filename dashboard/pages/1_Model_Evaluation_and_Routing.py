@@ -62,28 +62,39 @@ with right:
     st.metric("Unsupported claims", f"{best['unsupported_claim_rate']:.1%}")
 
 st.subheader("Full benchmark")
+display_df = scenario_df[
+    [
+        "approach",
+        "precision",
+        "recall",
+        "task_success_rate",
+        "tool_success_rate",
+        "unsupported_claim_rate",
+        "latency_ms",
+        "cost_usd",
+        "utility_score",
+    ]
+].copy()
+for column in [
+    "precision",
+    "recall",
+    "task_success_rate",
+    "tool_success_rate",
+    "unsupported_claim_rate",
+]:
+    display_df[column] = display_df[column].map(lambda value: f"{value:.1%}")
+
 st.dataframe(
-    scenario_df[
-        [
-            "approach",
-            "precision",
-            "recall",
-            "task_success_rate",
-            "tool_success_rate",
-            "unsupported_claim_rate",
-            "latency_ms",
-            "cost_usd",
-            "utility_score",
-        ]
-    ],
+    display_df,
     use_container_width=True,
     hide_index=True,
     column_config={
-        "precision": st.column_config.NumberColumn("Precision", format="%.1%%"),
-        "recall": st.column_config.NumberColumn("Recall", format="%.1%%"),
-        "task_success_rate": st.column_config.NumberColumn("Task success", format="%.1%%"),
-        "tool_success_rate": st.column_config.NumberColumn("Tool success", format="%.1%%"),
-        "unsupported_claim_rate": st.column_config.NumberColumn("Unsupported claims", format="%.1%%"),
+        "approach": "Approach",
+        "precision": "Precision",
+        "recall": "Recall",
+        "task_success_rate": "Task success",
+        "tool_success_rate": "Tool success",
+        "unsupported_claim_rate": "Unsupported claims",
         "latency_ms": st.column_config.NumberColumn("Latency (ms)", format="%d"),
         "cost_usd": st.column_config.NumberColumn("Cost / task", format="$%.3f"),
         "utility_score": st.column_config.ProgressColumn(
