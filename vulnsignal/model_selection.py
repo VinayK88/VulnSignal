@@ -81,14 +81,17 @@ def utility_score(evaluation: ModelEvaluation) -> float:
             "tools": 0.07,
         }
     else:
+        # Investigation workflows value planning and reliable tool use more than
+        # raw throughput; this lets a slower agentic system win only when its
+        # end-to-end task performance justifies the extra operational cost.
         weights = {
-            "precision": 0.20,
-            "recall": 0.16,
-            "task": 0.28,
-            "latency": 0.04,
-            "cost": 0.03,
-            "grounded": 0.12,
-            "tools": 0.17,
+            "precision": 0.17,
+            "recall": 0.12,
+            "task": 0.36,
+            "latency": 0.02,
+            "cost": 0.01,
+            "grounded": 0.10,
+            "tools": 0.22,
         }
 
     score = (
