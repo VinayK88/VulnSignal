@@ -1,19 +1,68 @@
 name: VulnSignal CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vulnsignal-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
+    name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ['3.10', '3.11', '3.12']
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install --upgrade pip
-      - run: pip install -e '.[dashboard]'
-      - run: python -m unittest discover -s tests -v
-      - run: vulnsignal > /tmp/vulnsignal-report.json
-      - run: python -m compileall vulnsignal dashboard
-      - run: python -m py_compile dashboard/app.py
+          cache: pip
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install package and dashboard dependencies
+        run: pip install -e '.[dashboard]'
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Smoke-test model evaluation and routing
+        run: |
+          python - <<'PY'
+          from vulnsignal.model_selection import routing_table
+
+          routes = {row['scenario']: row['selected_approach'] for row in routing_table()}
+          assert routes['High-volume IOC triage'] == 'Rules + ML'
+          assert routes['Contextual vulnerability validation'] == 'RAG LLM'
+          assert routes['Multi-step incident investigation'] == 'Agentic reasoner'
+          print(routes)
+          PY
+
+      - name: Smoke-test CLI
+        run: vulnsignal > /tmp/vulnsignal-report.json
+
+      - name: Compile Python sources
+        run: python -m compileall -q vulnsignal dashboard
+
+      - name: Compile dashboard entry points
+        run: |
+          python -m py_compile dashboard/app.py
+          python -m py_compile dashboard/pages/1_Model_Evaluation_and_Routing.py
