@@ -19,6 +19,8 @@
 
 ![VulnSignal dashboard preview](assets/dashboard-preview.svg)
 
+> **Reviewer evidence:** [Reproduce the benchmark and follow the five-minute walkthrough](BENCHMARK.md).
+
 VulnSignal is a security data-science and AI-systems platform for evaluating AI-generated security findings across the **full security workflow**—not just raw model accuracy.
 
 It answers two hard questions:
